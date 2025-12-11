@@ -68,6 +68,8 @@ everything
 collations
 identitycols
 partitioning
+partitioned_pk
+partitioned_pk_create
 privileges
 enumdefaults
 enumdeps
