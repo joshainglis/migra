@@ -20,6 +20,7 @@ in
     #    migra
     config.languages.python.package.pkgs.psycopg2
     config.languages.python.package.pkgs.packaging
+    config.languages.python.package.pkgs.pygments
     config.languages.python.package.pkgs.hatchling
     config.languages.python.package.pkgs.uv
   ];
@@ -34,7 +35,7 @@ in
   services.postgres.enable = true;
   services.postgres.package = postgresql;
   services.postgres.listen_addresses = "127.0.0.1";
-  services.postgres.initialScript = "CREATE ROLE postgres SUPERUSER;";
+  services.postgres.initialScript = "CREATE ROLE postgres SUPERUSER LOGIN;";
 
   enterShell = ''
     git --version
