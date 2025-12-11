@@ -55,4 +55,3 @@ Once you have python installed you need to install `pip`. This too can complicat
 ## Aside: Virtual environments
 
 `python` has the notion of `virtual environments` (often called `virtualenv`s or `venv`s) which create an isolated place to install external python packages separate from what might have already be installed by the operating system. It's generally good practice to use these when working with Python - but if you're not otherwise using Python and just need `migra` from the command line, these may not be worth bothering with.
-

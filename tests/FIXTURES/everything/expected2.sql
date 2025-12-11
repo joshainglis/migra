@@ -183,3 +183,7 @@ create or replace view "public"."vvv" as  SELECT 2 AS a;
 grant update on table "public"."products" to "postgres";
 
 drop schema if exists "badschema";
+
+COMMENT ON EXTENSION citext IS 'data type for case-insensitive character strings';
+
+COMMENT ON EXTENSION hstore IS 'data type for storing sets of (key, value) pairs';

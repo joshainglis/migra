@@ -1,5 +1,3 @@
-from __future__ import print_function, unicode_literals
-
 import argparse
 import sys
 from contextlib import contextmanager
@@ -31,14 +29,14 @@ def parse_args(args):
     parser.add_argument(
         "--schema",
         dest="schema",
-        action='append',
+        action="append",
         default=[],
         help="Restrict output to statements for a particular schema",
     )
     parser.add_argument(
         "--exclude_schema",
         dest="exclude_schema",
-        action='append',
+        action="append",
         default=[],
         help="Restrict output to statements for all schemas except the specified schema",
     )

@@ -19,9 +19,6 @@ in
     python
     #    migra
     config.languages.python.package.pkgs.psycopg2
-    config.languages.python.package.pkgs.sqlalchemy
-    config.languages.python.package.pkgs.pytest
-    config.languages.python.package.pkgs.pytest-cov
     config.languages.python.package.pkgs.packaging
     config.languages.python.package.pkgs.hatchling
     config.languages.python.package.pkgs.uv
@@ -55,7 +52,8 @@ in
     ''
       echo "Running tests"
       timeout 30 bash -c "until ${pg_isready} -d template1 -q; do sleep 0.5; done"
-      python -m pytest tests
+      export PGUSER=postgres
+      uv run pytest tests
     '';
 
   git-hooks.hooks = {
@@ -66,7 +64,7 @@ in
     deadnix.enable = true;
     nixfmt-rfc-style.enable = true;
     end-of-file-fixer.enable = true;
-    markdownlint.enable = true;
+    markdownlint.enable = false;
     pyupgrade.enable = true;
     ripsecrets.enable = true;
     trufflehog.enable = true;

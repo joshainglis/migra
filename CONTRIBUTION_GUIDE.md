@@ -20,4 +20,3 @@ Your humble team of maintainers currently consists of the following folks:
 
 - @djrobstep (original author)
 - @maximsmol, @kennyworkman, @aidanabd (new volunteers from latch.bio)
-

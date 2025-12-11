@@ -1,9 +1,8 @@
-from __future__ import unicode_literals
-
 import io
 from difflib import ndiff as difflib_diff
 
 import pytest
+from sqlalchemy import text
 
 # import yaml
 from pytest import raises
@@ -31,7 +30,7 @@ def test_statements():
     s1 = Statements(["select 1;"])
     s2 = Statements(["select 2;"])
     s3 = s1 + s2
-    assert type(s1) == type(s2) == type(s3)
+    assert type(s1) is type(s2) is type(s3)
     s3 = s3 + Statements([DROP])
     with raises(UnsafeMigrationException):
         assert s3.sql == SQL
@@ -97,9 +96,9 @@ schemainspect_test_role = "schemainspect_test_role"
 
 def create_role(s, rolename):
     role = s.execute(
-        """
+        text("""
 SELECT 1 FROM pg_roles WHERE rolname=:rolename
-    """,
+    """),
         dict(rolename=rolename),
     )
 
@@ -107,9 +106,9 @@ SELECT 1 FROM pg_roles WHERE rolname=:rolename
 
     if not role_exists:
         s.execute(
-            f"""
+            text(f"""
             create role {rolename};
-        """
+        """)
         )
 
 
@@ -141,10 +140,11 @@ def do_fixture_test(
     if with_privileges:
         flags += ["--with-privileges"]
     fixture_path = "tests/FIXTURES/{}/".format(fixture_name)
-    EXPECTED = io.open(fixture_path + "expected.sql").read().strip()
-    with temporary_database(host="localhost") as d0, temporary_database(
-        host="localhost"
-    ) as d1:
+    EXPECTED = open(fixture_path + "expected.sql").read().strip()
+    with (
+        temporary_database() as d0,
+        temporary_database() as d1,
+    ):
         with S(d0) as s0:
             create_role(s0, schemainspect_test_role)
         with S(d0) as s0, S(d1) as s1:
@@ -153,7 +153,7 @@ def do_fixture_test(
 
         args = parse_args([d0, d1])
         assert not args.unsafe
-        assert args.schema is None
+        assert args.schema == []
 
         out, err = outs()
         assert run(args, out=out, err=err) == 3
@@ -165,7 +165,7 @@ def do_fixture_test(
 
         args = parse_args(flags + [d0, d1])
         assert args.unsafe
-        assert args.schema == schema
+        assert args.schema == ([schema] if schema else [])
         out, err = outs()
         assert run(args, out=out, err=err) == 2
         assert err.getvalue() == ""
@@ -174,8 +174,8 @@ def do_fixture_test(
         if check_expected:
             assert output == EXPECTED
 
-        ADDITIONS = io.open(fixture_path + "additions.sql").read().strip()
-        EXPECTED2 = io.open(fixture_path + "expected2.sql").read().strip()
+        ADDITIONS = open(fixture_path + "additions.sql").read().strip()
+        EXPECTED2 = open(fixture_path + "expected2.sql").read().strip()
 
         with S(d0) as s0, S(d1) as s1:
             m = Migration(

@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 import re
 
 
@@ -10,7 +8,7 @@ def check_for_drop(s):
 class Statements(list):
     def __init__(self, *args, **kwargs):
         self.safe = True
-        super(Statements, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     @property
     def sql(self):

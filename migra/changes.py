@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 from collections import OrderedDict as od
 from functools import partial
 
@@ -239,7 +237,11 @@ def get_table_changes(
     for t, v in tables_target.items():
         G.add_edges_from((t, d) for d in v.dependents)
 
-    tables_sorted = {k: tables_target[k] for k in lexicographical_topological_sort(G) if k in tables_target}
+    tables_sorted = {
+        k: tables_target[k]
+        for k in lexicographical_topological_sort(G)
+        if k in tables_target
+    }
 
     for t, v in tables_sorted.items():
         if t in added:
@@ -421,7 +423,7 @@ def get_trigger_changes(
     enums_from,
     enums_target,
     add_dependents_for_modified=True,
-    **kwargs
+    **kwargs,
 ):
     (
         _,
@@ -533,7 +535,7 @@ def get_selectable_changes(
     return statements
 
 
-class Changes(object):
+class Changes:
     def __init__(self, i_from, i_target, ignore_extension_versions=False):
         self.i_from = i_from
         self.i_target = i_target
